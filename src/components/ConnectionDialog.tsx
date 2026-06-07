@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { buildConnectionUrl, parseConnectionUrl } from '../connectionUrl'
 import {
   type ConnectionConfig,
   type DbClient,
   DEFAULT_PORTS,
   CLIENT_LABELS,
+  configToPayload,
   defaultConfig,
+  generateId,
 } from '../types'
 import { parseTagsInput } from '../connectionSearch'
 import './ConnectionDialog.css'
@@ -41,6 +43,15 @@ export default function ConnectionDialog({
   const [tagsInput, setTagsInput] = useState(initialTags.join(', '))
   const [config, setConfig] = useState<ConnectionConfig>(initial)
   const [connectionUrl, setConnectionUrl] = useState(() => buildConnectionUrl(initial))
+  const [validating, setValidating] = useState(false)
+  const [formMessage, setFormMessage] = useState<{
+    type: 'error' | 'success'
+    text: string
+  } | null>(null)
+
+  useEffect(() => {
+    setFormMessage(null)
+  }, [name, alias, tagsInput, config, connectionUrl])
 
   const update = (patch: Partial<ConnectionConfig>) => {
     setConfig((c) => {
@@ -63,6 +74,36 @@ export default function ConnectionDialog({
   const handleBrowse = async () => {
     const path = await window.dbApi.openFile()
     if (path) update({ filename: path })
+  }
+
+  const handleValidate = async () => {
+    setValidating(true)
+    setFormMessage(null)
+    const tempId = generateId()
+    try {
+      const res = await window.dbApi.connect(tempId, configToPayload(config))
+      if (!res.success) {
+        setFormMessage({ type: 'error', text: res.error ?? 'Connection failed' })
+        return
+      }
+
+      const schemasRes = await window.dbApi.listSchemas(tempId)
+      await window.dbApi.disconnect(tempId)
+      if (!schemasRes.success) {
+        setFormMessage({
+          type: 'error',
+          text: schemasRes.error ?? 'Failed to load database metadata',
+        })
+        return
+      }
+
+      setFormMessage({ type: 'success', text: 'Connection successful' })
+    } catch (err) {
+      await window.dbApi.disconnect(tempId).catch(() => {})
+      setFormMessage({ type: 'error', text: (err as Error).message })
+    } finally {
+      setValidating(false)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -249,13 +290,31 @@ export default function ConnectionDialog({
             </>
           )}
 
+          {formMessage && (
+            <div
+              className={`form-message badge badge-${formMessage.type === 'error' ? 'error' : 'success'}`}
+              role={formMessage.type === 'error' ? 'alert' : 'status'}
+            >
+              {formMessage.text}
+            </div>
+          )}
+
           <div className="dialog-actions">
             <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleValidate}
+              disabled={loading || validating}
+            >
+              {validating && <span className="spinner" />}
+              Validate
+            </button>
+            <button type="submit" className="btn btn-primary" disabled={loading || validating}>
               {loading && <span className="spinner" />}
-              {editing ? 'Test & Update' : 'Test & Save'}
+              {editing ? 'Update' : 'Save'}
             </button>
           </div>
         </form>

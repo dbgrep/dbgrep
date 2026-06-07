@@ -106,6 +106,16 @@
   accent-color: var(--accent);
 }
 
+.form-message {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+}
+
 .dialog-actions {
   display: flex;
   justify-content: flex-end;

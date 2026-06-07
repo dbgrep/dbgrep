@@ -239,17 +239,21 @@ export default function App() {
         tags: meta.tags.length ? meta.tags : undefined,
         config,
       })
+      setShowDialog(false)
+      setEditingConnectionId(null)
+      setDialogLoading(false)
 
       const res = await window.dbApi.connect(id, configToPayload(config))
       if (!res.success) {
-        setStatusMessage(res.error ?? 'Connection failed')
-        setDialogLoading(false)
+        const message = res.error ?? 'Connection failed'
+        setStatusMessage(message)
+        updateRuntime(id, { connected: false, connecting: false, schemas: [], error: message })
         return
       }
 
       try {
         const schemas = await loadMetadata(id)
-        updateRuntime(id, { connected: true, schemas })
+        updateRuntime(id, { connected: true, schemas, error: undefined })
         setActiveConnectionId(id)
         setExpanded((prev) => {
           const next = {
@@ -270,13 +274,12 @@ export default function App() {
         ])
         setQueryStates((prev) => ({ ...prev, [tabId]: emptyQueryState() }))
         setActiveTabId(tabId)
-        setShowDialog(false)
-        setEditingConnectionId(null)
       } catch (err) {
         await window.dbApi.disconnect(id)
-        setStatusMessage((err as Error).message)
+        const message = (err as Error).message
+        setStatusMessage(message)
+        updateRuntime(id, { connected: false, connecting: false, schemas: [], error: message })
       }
-      setDialogLoading(false)
     },
     [addConnection, loadMetadata, updateRuntime]
   )
@@ -304,25 +307,27 @@ export default function App() {
         tags: meta.tags.length ? meta.tags : undefined,
         config,
       })
+      setShowDialog(false)
+      setEditingConnectionId(null)
+      setDialogLoading(false)
 
       const res = await window.dbApi.connect(id, configToPayload(config))
       if (!res.success) {
-        setStatusMessage(res.error ?? 'Connection failed')
-        setDialogLoading(false)
+        const message = res.error ?? 'Connection failed'
+        setStatusMessage(message)
+        updateRuntime(id, { connected: false, connecting: false, schemas: [], error: message })
         return
       }
 
       try {
         const schemas = await loadMetadata(id)
         updateRuntime(id, { connected: true, schemas, error: undefined })
-        setShowDialog(false)
-        setEditingConnectionId(null)
       } catch (err) {
         await window.dbApi.disconnect(id)
-        updateRuntime(id, { connected: false, schemas: [], error: (err as Error).message })
-        setStatusMessage((err as Error).message)
+        const message = (err as Error).message
+        setStatusMessage(message)
+        updateRuntime(id, { connected: false, connecting: false, schemas: [], error: message })
       }
-      setDialogLoading(false)
     },
     [editingConnectionId, runtime, updateConnection, loadMetadata, updateRuntime]
   )
