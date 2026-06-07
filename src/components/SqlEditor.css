@@ -1,0 +1,24 @@
+.sql-editor {
+  height: 200px;
+  min-height: 120px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.sql-editor .monaco-editor {
+  border-radius: var(--radius-sm);
+}
+
+.sql-editor .sql-error-line {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.sql-editor .sql-error-glyph {
+  background: var(--error);
+  border-radius: 50%;
+  margin-left: 4px;
+  width: 8px !important;
+  height: 8px !important;
+}

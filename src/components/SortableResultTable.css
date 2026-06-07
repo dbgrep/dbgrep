@@ -1,0 +1,39 @@
+.sortable-col-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-col-header:hover {
+  color: var(--text);
+}
+
+.sortable-col-header.sorted {
+  color: var(--text);
+}
+
+.sortable-col-indicator {
+  font-size: 10px;
+  opacity: 0.45;
+}
+
+.sortable-col-header.sorted .sortable-col-indicator {
+  opacity: 1;
+}
+
+.sortable-table-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--text-muted);
+  padding: 40px;
+}
