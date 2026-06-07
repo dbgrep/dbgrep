@@ -39,12 +39,19 @@
   "build": {
     "appId": "com.dbgrep.app",
     "productName": "DBGrep",
+    "icon": "src/assets/dbgrep-icon-1024.png",
     "directories": {
       "output": "release"
     },
     "files": [
       "dist/**/*",
       "dist-electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "src/assets/dbgrep-icon-512.png",
+        "to": "icon.png"
+      }
     ],
     "mac": {
       "category": "public.app-category.developer-tools"

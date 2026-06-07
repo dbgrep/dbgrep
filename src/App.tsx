@@ -8,6 +8,7 @@ import TabBar from './components/TabBar'
 import ShortcutsPanel, { ShortcutsButton } from './components/ShortcutsPanel'
 import GitHubButton from './components/GitHubButton'
 import { GITHUB_REPO_URL } from './constants'
+import { appIcons } from './assets/icons'
 import { openExternalUrl } from './utils/openExternal'
 import { useSavedConnections } from './hooks/useSavedConnections'
 import { usePersistedSession } from './hooks/usePersistedSession'
@@ -1034,10 +1035,7 @@ export default function App() {
             <div className="welcome">
               <div className="welcome-brand">
                 <div className="welcome-logo" aria-hidden="true">
-                  <svg width="24" height="24" viewBox="0 0 18 18" fill="none">
-                    <rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M5 7h8M5 10h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
+                  <img src={appIcons.png256} alt="" width={40} height={40} />
                 </div>
                 <span className="welcome-title">DBGrep</span>
               </div>

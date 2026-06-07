@@ -2,6 +2,8 @@
 
 A desktop database browser for PostgreSQL, MySQL, SQLite, and SQL Server. Browse tables and run SQL queries.
 
+<img src=".github/demo.gif" width="700" alt="DBGrep demo" />
+
 ## Quick start
 
 ```bash

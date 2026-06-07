@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, nativeImage } from 'electron'
 import path from 'path'
 import { writeFile } from 'fs/promises'
 import {
@@ -26,12 +26,22 @@ import {
 
 let mainWindow: BrowserWindow | null = null
 
+function getAppIcon() {
+  const iconPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'icon.png')
+    : path.join(__dirname, '../src/assets/dbgrep-icon-512.png')
+  return nativeImage.createFromPath(iconPath)
+}
+
 function createWindow() {
+  const icon = getAppIcon()
+
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
     minWidth: 1000,
     minHeight: 600,
+    icon,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -64,6 +74,10 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  if (process.platform === 'darwin' && app.dock) {
+    app.dock.setIcon(getAppIcon())
+  }
+
   createWindow()
 
   app.on('activate', () => {
