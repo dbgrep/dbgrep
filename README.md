@@ -1,6 +1,10 @@
 # DBGrep
 
-A desktop database browser for PostgreSQL, MySQL, SQLite, and SQL Server. Browse tables and run SQL queries.
+A fast, minimal desktop database client for PostgreSQL, MySQL, SQLite, and SQL Server.
+
+Connect to your databases, browse tables, write SQL, and export results — without the bloat of a full enterprise suite. DBGrep is built for developers who want a lightweight tool that stays out of the way: a Monaco-powered query editor, visual table filters, and one-click CSV/JSON export, all in a clean desktop app.
+
+Free and open source (Apache 2.0). Runs on macOS, Windows, and Linux. Your connections stay on your machine.
 
 <img src=".github/demo.gif" width="700" alt="DBGrep demo" />
 
