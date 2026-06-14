@@ -159,6 +159,14 @@ A `sample.db` SQLite file is included for testing connections.
 
 ## Troubleshooting
 
+### Build fails during signing with "resource fork, Finder information, or similar detritus not allowed"
+
+This usually happens when the project lives on an **iCloud-synced Desktop or Documents** folder. macOS adds extended attributes that `codesign` rejects.
+
+**Quick fix:** use `npm run build:signed` — it builds to `/tmp/dbgrep-release` (outside iCloud) and copies the finished artifacts to `release/`.
+
+**Permanent fix:** move the project to a local folder outside iCloud, e.g. `~/Projects/dbviewer`.
+
 ### `npm install` fails on `better-sqlite3`
 
 Install the native build tools for your platform (see Prerequisites), then:

@@ -41,6 +41,8 @@
   "build": {
     "appId": "com.dbgrep.app",
     "productName": "DBGrep",
+    "afterExtract": "./scripts/after-extract.cjs",
+    "afterPack": "./scripts/after-pack.cjs",
     "icon": "src/assets/dbgrep-icon-1024.png",
     "directories": {
       "output": "release"
