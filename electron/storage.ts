@@ -3,7 +3,7 @@ import path from 'path'
 import os from 'os'
 import type { SavedConnection, Tab } from '../src/types'
 
-const DATA_DIR = path.join(os.homedir(), '.dbviewer')
+const DATA_DIR = path.join(os.homedir(), '.dbgrep')
 const CONNECTIONS_FILE = path.join(DATA_DIR, 'connections.json')
 const SESSION_FILE = path.join(DATA_DIR, 'session.json')
 

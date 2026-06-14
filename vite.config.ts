@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react'
 import electron from 'vite-plugin-electron/simple'
 
 export default defineConfig({
+  server: {
+    port: 5174,
+    strictPort: true,
+  },
   plugins: [
     react(),
     electron({

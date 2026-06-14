@@ -2,6 +2,7 @@ import { useState, useCallback, useImperativeHandle, forwardRef, useRef, useEffe
 import DataTable from './DataTable'
 import SqlEditor, { type SqlEditorHandle } from './SqlEditor'
 import type { DbClient, QueryResult, AutocompleteCatalog } from '../types'
+import { CLIENT_ICONS } from '../types'
 import { formatSql, isExplainableSql, parseSqlErrorLine } from '../sqlUtils'
 import './QueryEditor.css'
 
@@ -11,6 +12,7 @@ interface Props {
   error: string | null
   loading: boolean
   connectionId: string
+  databaseName: string
   dbClient: DbClient
   lastExecutedSql: string | null
   catalog: AutocompleteCatalog
@@ -36,6 +38,7 @@ const QueryEditor = forwardRef<QueryEditorHandle, Props>(function QueryEditor(
     error,
     loading,
     connectionId,
+    databaseName,
     dbClient,
     lastExecutedSql,
     catalog,
@@ -145,6 +148,12 @@ const QueryEditor = forwardRef<QueryEditorHandle, Props>(function QueryEditor(
   return (
     <div className="query-editor">
       <div className="query-toolbar">
+        <span className="query-db-tag" title={`Connected database: ${databaseName}`}>
+          <span className="query-db-tag-icon" aria-hidden="true">
+            {CLIENT_ICONS[dbClient]}
+          </span>
+          {databaseName}
+        </span>
         <button className="btn btn-primary run-btn" onClick={run} disabled={loading} type="button">
           {loading ? <span className="spinner" /> : '▶'}
           Run

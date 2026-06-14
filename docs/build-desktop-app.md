@@ -63,13 +63,72 @@ This command:
 
 When it finishes, check the `release/` folder for your app.
 
+## Signed release (macOS / Windows)
+
+If you have code-signing certificates on your machine, you can produce a build that macOS Gatekeeper and Windows SmartScreen will trust without workarounds.
+
+### 1. Configure credentials
+
+```bash
+cp .env.signing.example .env.signing
+```
+
+Edit `.env.signing` (this file is gitignored).
+
+**macOS — certificate already in Keychain** (most common if you installed it on this Mac):
+
+```bash
+security find-identity -v -p codesigning
+```
+
+Copy the identity name into `CSC_NAME`, but **omit** the `Developer ID Application:` prefix (electron-builder adds it automatically). For example, if Keychain shows `Developer ID Application: Your Name (TEAMID)`, use:
+
+```
+CSC_NAME="Your Name (TEAMID)"
+```
+
+You also need Apple notarization credentials:
+
+- `APPLE_ID` — your Apple ID email
+- `APPLE_APP_SPECIFIC_PASSWORD` — create at [appleid.apple.com](https://appleid.apple.com) → App-Specific Passwords
+- `APPLE_TEAM_ID` — from [developer.apple.com/account](https://developer.apple.com/account) → Membership details
+
+**macOS or Windows — certificate as a file (.p12 / .pfx):**
+
+```
+CSC_LINK=/absolute/path/to/your-certificate.p12
+CSC_KEY_PASSWORD=your-certificate-password
+```
+
+Comment out `CSC_NAME` if you use `CSC_LINK` instead.
+
+### 2. Build
+
+```bash
+chmod +x scripts/build-signed.sh   # first time only
+npm run build:signed
+```
+
+This compiles the app, signs it with your certificate, and notarizes the macOS build with Apple. Output is still in `release/` — look for `DBGrep-*.dmg` on macOS or `DBGrep Setup *.exe` on Windows.
+
+### 3. Verify (macOS)
+
+```bash
+spctl -a -vv release/mac-arm64/DBGrep.app
+codesign -dv --verbose=4 release/mac-arm64/DBGrep.app
+```
+
+You should see `source=Notarized Developer ID` from `spctl`.
+
+Unsigned local builds still work with `npm run build` (no certificates required).
+
 ## Step 4 — Install and run
 
 ### macOS
 
 1. Open `release/mac-arm64/DBGrep.app` (or `release/mac/DBGrep.app` on Intel Macs).
 2. Drag **DBGrep** to **Applications** to keep it permanently.
-3. On first launch, macOS may block the app because it is not signed. Open **System Settings → Privacy & Security** and click **Open Anyway**, or right-click the app and choose **Open**.
+3. On first launch, macOS may block the app because it is not signed. Open **System Settings → Privacy & Security** and click **Open Anyway**, or right-click the app and choose **Open**. Signed builds from `npm run build:signed` skip this step.
 
 ### Windows
 
@@ -135,4 +194,5 @@ For Windows or Linux installers from macOS, use a Windows or Linux machine (or C
 | Install dependencies | `npm install` |
 | Run in dev mode | `npm start` |
 | Build desktop app | `npm run build` |
+| Build signed release | `npm run build:signed` |
 | Output location | `release/` |

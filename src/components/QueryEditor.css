@@ -15,6 +15,31 @@
   background: var(--bg-elevated);
 }
 
+.query-db-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.query-db-tag-icon {
+  font-size: 12px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
 .run-btn {
   padding: 5px 14px;
   font-size: 13px;

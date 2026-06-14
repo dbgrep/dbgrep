@@ -1,12 +1,14 @@
 {
   "name": "dbgrep",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Desktop database browser with SQL query support",
+  "author": "Steven Mi",
   "license": "Apache-2.0",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
+    "build:signed": "bash scripts/build-signed.sh",
     "preview": "vite preview",
     "start": "env -u ELECTRON_RUN_AS_NODE vite"
   },
@@ -54,7 +56,20 @@
       }
     ],
     "mac": {
-      "category": "public.app-category.developer-tools"
+      "category": "public.app-category.developer-tools",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
     }
   }
 }

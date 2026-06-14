@@ -1078,6 +1078,7 @@ export default function App() {
               error={activeQueryState.error}
               loading={activeQueryState.loading}
               connectionId={activeTab.connectionId}
+              databaseName={activeConnection.alias?.trim() || activeConnection.name}
               dbClient={activeConnection.config.client}
               lastExecutedSql={activeQueryState.lastExecutedSql}
               catalog={autocompleteCatalog}

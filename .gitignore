@@ -5,3 +5,6 @@ release/
 sample.db
 *.db
 .DS_Store
+.env.signing
+*.p12
+*.pfx
